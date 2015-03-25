@@ -23,43 +23,6 @@ app.engine('jsx', ReactEngine());
 
 Change your *views directory* to match your *components directory* and set `jsx` as your view engine.
 
-
-## Options
-
-`wrapper` is a React component that renders the Html element as well as the initial props and children Html.
-
-### Example
-
-``` javascript
-app.engine('jsx', reactEngine({wrapper: 'html.jsx'}));
-```
-
-**/components/html.jsx**
-``` javascript
-var React = require('react');
-
-var Html = React.createClass({
-  render: function () {
-    return (
-      <html>
-        <head>
-          <title>{this.props.props.title}</title>
-          <link rel='stylesheet' type='text/css' href='/stylesheets/style.css' />
-        </head>
-        <body>
-            <div id='view' dangerouslySetInnerHTML={{__html: this.props.body}} />
-            <script type='application/json' dangerouslySetInnerHTML={{__html: JSON.stringify(this.props.props)}} />
-            <script src='/javascripts/bundle.js' />
-        </body>
-      </html>
-    );
-  }
-});
-
-module.exports = Html;
-
-```
-
 ## Views
 
 Your `views` can be simple modules that export a React Component.
@@ -96,6 +59,63 @@ module.exports = router;
 
 ```
 Now `foo` will be available within the component as `this.props.foo`.
+
+## Options
+
+`wrapper` is a React component that, given an [Express route](https://github.com/magalhas/express-react-engine#routes), it renders the Html element as well as the initial props and children Html.  
+
+* *this.props.props* contains the initial props send through the `response.render` (see [routes](https://github.com/magalhas/express-react-engine#routes))
+* *this.props.body* is the corresponding component that is rendered when some route is hit
+
+### Example
+
+``` javascript
+app.engine('jsx', reactEngine({wrapper: 'html.jsx'}));
+```
+
+**components/html.jsx**
+``` javascript
+var React = require('react');
+
+var Html = React.createClass({
+  render: function () {
+    return (
+      <html>
+        <head>
+          <title>{this.props.props.foo}</title>
+          <link rel='stylesheet' type='text/css' href='/stylesheets/style.css' />
+        </head>
+        <body>
+            <div id='view' dangerouslySetInnerHTML={{__html: this.props.body}} />
+            <script type='application/json' dangerouslySetInnerHTML={{__html: JSON.stringify(this.props.props)}} />
+            <script src='/javascripts/bundle.js' />
+        </body>
+      </html>
+    );
+  }
+});
+
+module.exports = Html;
+
+```
+
+**home/index.jsx**
+```javascript
+var React = require('react');
+var App = require('./App.jsx');
+
+var Index = React.createClass({
+  render: function () {
+    return (
+      <App />
+    );
+  }
+});
+
+module.exports = Index;
+```
+
+In this case, **App** component (usually the parent component) will be rendered as a child of the **wrapper** component where `this.props.body` is used.
 
 ## Layouts
 
