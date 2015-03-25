@@ -58,14 +58,14 @@ router.get('/', function (req, res, next) {
 module.exports = router;
 
 ```
-Now `foo` will be available within the component as `this.props.foo`.
+Now `foo` will be available within the component as `this.props.props.foo`.
 
 ## Options
 
-`wrapper` is a React component that, given an [Express route](https://github.com/magalhas/express-react-engine#routes), it renders the Html element as well as the initial props and children Html.  
+`wrapper` is a React component that, given an [route](https://github.com/magalhas/express-react-engine#routes), it renders the Html element as well as the initial props and children Html. You can think of it as a *layout*.  
 
-* *this.props.props* contains the initial props send through the `response.render` (see [routes](https://github.com/magalhas/express-react-engine#routes))
-* *this.props.body* is the corresponding component that is rendered when some route is hit
+* *this.props.props* contains the initial props send through the `response.render` method(see [routes](https://github.com/magalhas/express-react-engine#routes))
+* *this.props.body* is the corresponding component that is rendered when some route is hit.
 
 ### Example
 
